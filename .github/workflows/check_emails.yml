@@ -15,9 +15,11 @@ jobs:
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
-      - run: |
-          echo ref ${{ github.ref }}
-          echo base_ref ${{ github.base_ref }}
-          echo base_ref is null ${{ github.base_ref == null }}
-          echo head_ref ${{ github.head_ref }}
-          echo head_ref is null ${{ github.head_ref == null }}
+      - name: Check branch commits
+        if: github.base_ref != null
+        run: |
+          git cherry ${{ github.base_ref }}
+      - name: Check current commit
+        if: github.base_ref == null
+        run: |
+          git rev-parse HEAD
