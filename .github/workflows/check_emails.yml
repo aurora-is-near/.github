@@ -15,14 +15,13 @@ jobs:
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
-      - name: Debug
-        run: git fetch && git log
       - name: Check email(s)
         run: |
           base_ref=${{ github.base_ref }}
           head_ref=${{ github.head_ref }}
           required_domain=${{ inputs.required_domain }}
 
+          git fetch
           if [[ $base_ref == "" ]] || [[ $head_ref == "" ]]; then
               commits="+ $(git rev-parse HEAD)"
           else
