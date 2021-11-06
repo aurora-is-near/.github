@@ -15,13 +15,22 @@ jobs:
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
-      - name: Check branch commits
-        if: github.base_ref != null
+      - name: Check email(s)
         run: |
-          git fetch
-          git cherry remotes/origin/master remotes/origin/test
-          git cherry ${{ github.base_ref }}
-      - name: Check current commit
-        if: github.base_ref == null
-        run: |
-          git rev-parse HEAD
+          base_ref=${{ github.base_ref }}
+          [[ $base_ref == "" ]] && base_ref="HEAD^1" || base_ref=remotes/origin/$base_ref
+          head_ref=${{ github.head_ref }}
+          [[ $head_ref == "" ]] && head_ref="HEAD" || head_ref=remotes/origin/$head_ref
+          required_domain=${{ inputs.required_domain }}
+
+          git cherry $base_ref $head_ref | grep "+" | while read line ; do
+              commit_hash=$(echo $line | awk '{print $2}')
+              email=$(git show -s --format='%ae' $commit_hash)
+              domain=$(echo $email | awk -F\@ '{print $2}')
+              if [[ $domain == $required_domain ]]; then
+                  echo $commit_hash ":" $email "- OK"
+              else
+                  echo $commit_hash ":" $email "- is not under domain $domain !!!"
+                  exit 1
+              fi
+          done
