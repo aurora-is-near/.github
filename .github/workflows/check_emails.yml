@@ -21,11 +21,14 @@ jobs:
         run: |
           base_ref=${{ github.base_ref }}
           head_ref=${{ github.head_ref }}
+          required_domain=${{ inputs.required_domain }}
+
           if [[ $base_ref == "" ]] || [[ $head_ref == "" ]]; then
               commits="+ $(git rev-parse HEAD)"
           else
               commits=$(git cherry remotes/origin/$base_ref remotes/origin/$head_ref)
           fi
+
           echo $commits | grep "+" | while read line ; do
               commit_hash=$(echo $line | awk '{print $2}')
               email=$(git show -s --format='%ae' $commit_hash)
@@ -33,7 +36,7 @@ jobs:
               if [[ $domain == $required_domain ]]; then
                   echo $commit_hash ":" $email "- OK"
               else
-                  echo $commit_hash ":" $email "- is not under domain $domain !!!"
+                  echo $commit_hash ":" $email "- is not under domain $required_domain !!!"
                   exit 1
               fi
           done
