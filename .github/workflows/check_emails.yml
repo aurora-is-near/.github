@@ -1,0 +1,21 @@
+name: Check committer(s) email(s)
+
+on:
+  workflow_call:
+    inputs:
+      required_domain:
+        default: 'aurora.dev'
+        required: false
+        type: string
+
+jobs:
+  check_emails:
+    name: Check committer(s) email(s)
+    runs-on: self-hosted
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2
+      - run: |
+          echo ref ${{ github.ref }}
+          echo base_ref ${{ github.base_ref }}
+          echo head_ref ${{ github.head_ref }}
