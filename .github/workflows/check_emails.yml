@@ -20,12 +20,13 @@ jobs:
       - name: Check email(s)
         run: |
           base_ref=${{ github.base_ref }}
-          [[ $base_ref == "" ]] && base_ref="HEAD^1" || base_ref=remotes/origin/$base_ref
           head_ref=${{ github.head_ref }}
-          [[ $head_ref == "" ]] && head_ref="HEAD" || head_ref=remotes/origin/$head_ref
-          required_domain=${{ inputs.required_domain }}
-
-          git cherry $base_ref $head_ref | grep "+" | while read line ; do
+          if [[ $base_ref == "" ]] || [[ $head_ref == "" ]]; then
+              commits="+ $(git rev-parse HEAD)"
+          else
+              commits=$(git cherry remotes/origin/$base_ref remotes/origin/$head_ref)
+          fi
+          echo $commits | grep "+" | while read line ; do
               commit_hash=$(echo $line | awk '{print $2}')
               email=$(git show -s --format='%ae' $commit_hash)
               domain=$(echo $email | awk -F\@ '{print $2}')
