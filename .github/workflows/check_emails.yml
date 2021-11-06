@@ -16,7 +16,7 @@ jobs:
       - name: Clone the repository
         uses: actions/checkout@v2
       - name: Debug
-        run: git log
+        run: git fetch && git log
       - name: Check email(s)
         run: |
           base_ref=${{ github.base_ref }}
