@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Check email(s)
         run: |
           base_ref=${{ github.base_ref }}
@@ -28,7 +30,7 @@ jobs:
               commits=$(git cherry remotes/origin/$base_ref remotes/origin/$head_ref)
           fi
 
-          echo $commits | grep "+" | while read line ; do
+          echo "$commits" | grep "+" | while read line ; do
               commit_hash=$(echo $line | awk '{print $2}')
               email=$(git show -s --format='%ae' $commit_hash)
               domain=$(echo $email | awk -F\@ '{print $2}')
