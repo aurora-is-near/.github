@@ -19,6 +19,7 @@ jobs:
         if: github.base_ref != null
         run: |
           git fetch
+          git cherry master
           git cherry ${{ github.base_ref }}
       - name: Check current commit
         if: github.base_ref == null
