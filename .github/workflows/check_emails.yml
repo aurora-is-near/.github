@@ -18,6 +18,7 @@ jobs:
       - name: Check branch commits
         if: github.base_ref != null
         run: |
+          git fetch
           git cherry ${{ github.base_ref }}
       - name: Check current commit
         if: github.base_ref == null
