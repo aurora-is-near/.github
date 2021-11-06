@@ -11,7 +11,7 @@ on:
 jobs:
   check_emails:
     name: Check committer(s) email(s)
-    runs-on: self-hosted
+    runs-on: [self-hosted, light]
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
           head_ref=${{ github.head_ref }}
           required_domain=${{ inputs.required_domain }}
 
-          git fetch
+          git fetch &>/dev/null
           if [[ $base_ref == "" ]] || [[ $head_ref == "" ]]; then
               commits="+ $(git rev-parse HEAD)"
           else
