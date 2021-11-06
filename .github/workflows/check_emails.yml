@@ -18,4 +18,6 @@ jobs:
       - run: |
           echo ref ${{ github.ref }}
           echo base_ref ${{ github.base_ref }}
+          echo base_ref is null ${{ github.base_ref == null }}
           echo head_ref ${{ github.head_ref }}
+          echo head_ref is null ${{ github.head_ref == null }}
