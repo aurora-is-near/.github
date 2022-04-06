@@ -2,11 +2,12 @@
 
 We are trying our best to eliminate as many vulnerabilities as possible during our development process and to avoid any potential risks bound to their exploitation. However we are not faultless. 
 
-One of the measures we decided to take is to carefully develop our Security policy and create the Aurora Bug Bounty Program in order to find the tricky vulnerabilities that even an audit cannot point to. You are many and you have the skill, work with us!
+One of the measures we decided to take is to carefully develop our Security policy and create the Aurora Bug Bounty Program in order to find the tricky vulnerabilities that even an audit cannot point to. You have the skill, work with us!
 
 How to?
 
-Explore our code, check our apps. Read through details of our Aurora Bug Bounty Program. But please, always make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our service. 
+Explore our code, check our web app. Read through details of our Aurora Bug Bounty Program. But please, always make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our service. 
+
 
 All security related issues should be reported via email to security@aurora.dev. Please follow the incident management process described below. We will attempt to respond within 48 hours to all reported issues.
 
