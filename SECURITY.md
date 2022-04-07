@@ -20,7 +20,7 @@ Thank you for taking the time to responsibly disclose any vulnerabilities you fi
 We call on you to help us find bugs in our smart contracts code and app, securely report it to us and work with us in accordance with rules of our Aurora Security Bug Bounty Program. 
 That will allow us not only to recognize you and your skill on our website, but also reward you for all the hard work!
 
-Detailed description of our Bug Bounty Program including issues and assets in scope, payment policy, eligibility and out of scope items can be found here (soon). 
+Detailed description of our Bug Bounty Program including issues and assets in scope, payment policy, eligibility and out of scope items can be found [here](https://aurora.dev/bug-bounty-program). 
 
 
 
