@@ -2,11 +2,11 @@
 
 We are trying our best to eliminate as many vulnerabilities as possible during our development process and to avoid any potential risks bound to their exploitation. However we are not faultless. 
 
-One of the measures we decided to take is to carefully develop our Security policy and create the Aurora Bug Bounty Program in order to find the tricky vulnerabilities that even an audit cannot point to. You have the skill, work with us!
+One of the measures we decided to take is to carefully develop our Security policy and create the Bug Bounty Program in order to find the tricky vulnerabilities that even an audit cannot point to. You have the skill, work with us!
 
 How to?
 
-Explore our code, check our web app. Read through details of our Aurora Bug Bounty Program. But please, always make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our service. 
+Explore our code, check our web app. Read through details of our Bug Bounty Program. But please, always make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our service. 
 
 
 All security related issues should be reported via email to security@aurora.dev. Please follow the incident management process described below. We will attempt to respond within 48 hours to all reported issues.
@@ -20,8 +20,9 @@ Thank you for taking the time to responsibly disclose any vulnerabilities you fi
 We call on you to help us find bugs in our smart contracts code and app, securely report it to us and work with us in accordance with rules of our Aurora Security Bug Bounty Program. 
 That will allow us not only to recognize you and your skill on our website, but also reward you for all the hard work!
 
-Detailed description of our Bug Bounty Program including issues and assets in scope, payment policy, eligibility and out of scope items can be found here (soon). 
+Detailed description of our Bug Bounty Program including issues, payment policy, eligibility and out of scope items can be found here (soon). 
 
+Assets in Scope for Bug Bounty Program can be found [here](https://github.com/aurora-is-near/aurora-security-public/blob/main/ABBP-AssetsInScope.md).
 
 
 ## Known Issues
