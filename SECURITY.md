@@ -17,7 +17,7 @@ Thank you for taking the time to responsibly disclose any vulnerabilities you fi
 
 ## Security Bug Bounties
 
-We call on you to help us find bugs in our smart contracts code and app, securely report it to us and work with us in accordance with rules of our Aurora Security Bug Bounty Program. 
+We call on you to help us find bugs in our smart contracts code and app, securely report it to us and work with us in accordance with rules of our Bug Bounty Program. 
 That will allow us not only to recognize you and your skill on our website, but also reward you for all the hard work!
 
 Detailed description of our Bug Bounty Program including issues, payment policy, eligibility and out of scope items can be found here (soon). 
@@ -36,7 +36,7 @@ Nothing to find here. Yet.
 
 ### 1. Reporting an incident and establishing communication channel
 
-To report a security issue send an email to security@aurora.dev. Please allow us easier identification of the email and start the Subject with *'Security issue: Risk level'*, or with *'Security Bug Bounty: Risk level'* if the report is eligible for bounty. 
+To report a security issue send an email to security@aurora.dev. Please allow us easier identification of the email and start the Subject with 'Security issue: *Risk level*'. 
 
 In the report include at least: your GitHub handle, description of the issue, components, reproduction, any other relevant details; your name is optional.
 
@@ -61,8 +61,6 @@ The issue will be discussed within the newly created draft security advisory.
 
 At this time the issue will be evaluated by members of the incident response group, there might be changes in risk level or the issue can be dismissed as known, duplicate, etc.
 
-If the issue is eligible for a bounty, we will confirm with you that you agree with the risk level assessment, or we shall discuss it until we find a resolution. 
-
 If necessary, other members of aurora-is-near organization can be added as collaborators to the draft security advisory.
 
 
@@ -83,9 +81,7 @@ If you consider resolution time too long, please have a written conversation abo
 
 Once the code has been deployed, the patches from the security advisory can be merged into the main source repository. 
 
-We currently do not use the Github workflow to publish security advisories. Once the issue and fix have been disclosed, and a bounty category is assessed if appropriate, the GitHub security advisory is no longer needed and can be closed.
-
-Aurora is recognizing bug bounty hunters on their website (a link will be placed here once we have hunters to mention).
+We currently do not use the Github workflow to publish security advisories. Once the issue and fix have been disclosed, the GitHub security advisory is no longer needed and can be closed.
 
 
 
