@@ -2,14 +2,14 @@
 
 We are trying our best to eliminate as many vulnerabilities as possible during our development process and to avoid any potential risks bound to their exploitation. However we are not faultless. 
 
-One of the measures we decided to take is to carefully develop our Security policy and create the Bug Bounty Program in order to find the tricky vulnerabilities that even an audit cannot point to. You have the skill, work with us!
+One of the measures we decided to take is to carefully develop our Security policy and to create the Bug Bounty Program in order to find the tricky vulnerabilities that even an audit cannot point to. You have the skill, work with us!
 
 How to?
 
 Explore our code, check our web app. Read through details of our Bug Bounty Program. But please, always make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our service. 
 
-
-All security related issues should be reported via email to security@aurora.dev. Please follow the incident management process described below. We will attempt to respond within 48 hours to all reported issues.
+All issues in scope of the Bug Bounty Program should be reported through [Immunefi](https://immunefi.com/bounty/aurora/).  
+All other security issues should be reported via email to security@aurora.dev. Please follow the incident management process described below. We will attempt to respond within 48 hours to all reported issues.
 
 Thank you for taking the time to responsibly disclose any vulnerabilities you find.
 
@@ -17,10 +17,10 @@ Thank you for taking the time to responsibly disclose any vulnerabilities you fi
 
 ## Security Bug Bounties
 
-We call on you to help us find bugs in our smart contracts code and app, securely report it to us and work with us in accordance with rules of our Bug Bounty Program. 
+We call on you to help us find bugs in our smart contracts code and web app, securely report it to us and work with us in accordance with rules of our Bug Bounty Program. 
 That will allow us not only to recognize you and your skill on our website, but also reward you for all the hard work!
 
-Detailed description of our Bug Bounty Program including issues, payment policy, eligibility and out of scope items can be found [here](https://immunefi.com/bounty/aurora/). 
+Detailed description of our Bug Bounty Program with Immunefi including issues, payment policy, eligibility and out of scope items can be found [here](https://immunefi.com/bounty/aurora/). 
 
 Assets in Scope for Bug Bounty Program can be found [here](https://github.com/aurora-is-near/aurora-security-public/blob/main/ABBP-AssetsInScope.md).
 
