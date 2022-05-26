@@ -36,7 +36,12 @@ Nothing to find here. Yet.
 
 ### 1. Reporting an incident and establishing communication channel
 
-To report a security issue send an email to security@aurora.dev. Please allow us easier identification of the email and start the Subject with 'Security issue: *Risk level*'. 
+To report a security issue send an email to security@aurora.dev.   
+Always include following information in the subject so we can react appropriately: 
+```
+Security event: [Risk level]
+# Where Risk level is either Critical, High, Medium, or Low.
+```
 
 In the report include at least: your GitHub handle, description of the issue, components, reproduction, any other relevant details; your name is optional.
 
