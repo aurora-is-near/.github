@@ -1,0 +1,40 @@
+name: Smart Contract Security Analysis
+
+on:
+  workflow_call:
+
+jobs:
+  scheduler:
+    name: Determine Backstage Contracts
+    runs-on: [self-hosted, light]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: aurora-is-near/github-helpers@main
+        id: component_matrix
+        with:
+          helper: generate-component-matrix
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backstage_url: ${{ secrets.BACKSTAGE_URL }}
+    outputs:
+      matrix: ${{ steps.component_matrix.outputs.output }}
+
+  build:
+    name: Contract Analysis
+    runs-on: [self-hosted, light]
+    needs: scheduler
+    strategy:
+      matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
+    steps:
+      - run: echo "Run for ${{ matrix.component }} at ${{ matrix.path }}"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Run Slither
+        uses: crytic/slither-action@main
+        if: ${{ matrix.runSlither }} == true
+        id: slither
+        with:
+          sarif: results.sarif
+          target: ${{ matrix.nodeRoot }}
+          slither-args: '--filter-paths "node_modules|testing" --exclude timestamp,solc-version,naming-convention,assembly-usage'
