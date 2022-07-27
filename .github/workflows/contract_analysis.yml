@@ -37,6 +37,5 @@ jobs:
         if: ${{ matrix.runSlither }} == true
         id: slither
         with:
-          sarif: results.sarif
           target: ${{ matrix.nodeRoot }}
           slither-args: '--filter-paths "node_modules|testing" --exclude timestamp,solc-version,naming-convention,assembly-usage'
