@@ -5,12 +5,11 @@ on:
 
 jobs:
   scheduler:
-    name: Determine Backstage Contracts
+    name: Backstage
     runs-on: [self-hosted, light]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - uses: aurora-is-near/github-helpers@main
         id: component_matrix
         with:
@@ -21,7 +20,7 @@ jobs:
       matrix: ${{ steps.component_matrix.outputs.output }}
 
   build:
-    name: Contract Analysis
+    name: Static Analysis
     runs-on: [self-hosted, light]
     needs: scheduler
     strategy:
