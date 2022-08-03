@@ -29,12 +29,25 @@ jobs:
       - run: echo "Run for ${{ matrix.component }} at ${{ matrix.path }}"
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup env variables
+      - name: Setup repo variables (.env.example)
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
+      - name: Setup component variables (.env.example)
+        working-directory: ${{ matrix.path }}
+        run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
+      - name: Setup repo variables (Makefile)
+        run: test -f Makefile && make env >> "$GITHUB_ENV" || true
+      - name: Setup component variables (Makefile)
+        working-directory: ${{ matrix.path }}
+        run: test -f Makefile && make env >> "$GITHUB_ENV" || true
       - name: Run Slither
-        uses: crytic/slither-action@main
-        if: ${{ matrix.runSlither }} == true
+        uses: aurora-is-near/slither-action@main
+        if: always() && matrix.runSlither
         id: slither
         with:
           target: ${{ matrix.nodeRoot }}
           slither-args: '--filter-paths "node_modules|testing" --exclude timestamp,solc-version,naming-convention,assembly-usage'
+      - name: Run Clippy
+        if: always() && matrix.runClippy
+        id: clippy
+        working-directory: ${{ matrix.path }}
+        run: cargo clippy --no-deps --lib -- -D clippy::as_conversions
