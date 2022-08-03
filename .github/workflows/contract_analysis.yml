@@ -30,7 +30,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup env variables
-        run: test -f .env.example && cat .env.example >> "$GITHUB_ENV"
+        run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
       - name: Run Slither
         uses: crytic/slither-action@main
         if: ${{ matrix.runSlither }} == true
