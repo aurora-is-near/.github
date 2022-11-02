@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: aurora-is-near/github-helpers@bridge
+      - uses: aurora-is-near/github-helpers@main
         id: component_matrix
         with:
           helper: generate-component-matrix
@@ -25,6 +25,7 @@ jobs:
     needs: scheduler
     strategy:
       matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
+      fail-fast: false
     steps:
       - run: echo "Run for ${{ matrix.component }} at ${{ matrix.path }}"
       - name: Checkout repository
