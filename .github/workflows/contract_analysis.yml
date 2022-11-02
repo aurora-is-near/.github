@@ -46,6 +46,7 @@ jobs:
         id: slither
         with:
           target: ${{ matrix.nodeRoot }}
+          node-version: 18
           slither-args: '--filter-paths "node_modules|testing" --exclude timestamp,solc-version,naming-convention,assembly-usage'
       - name: Run Clippy
         if: always() && matrix.runClippy
