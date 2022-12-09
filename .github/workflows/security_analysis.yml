@@ -1,0 +1,79 @@
+name: Quality & Security Analysis
+
+on:
+  workflow_call:
+
+jobs:
+  scheduler:
+    name: Backstage
+    runs-on: [self-hosted, light]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: aurora-is-near/github-helpers@wip
+        id: component_matrix
+        with:
+          helper: generate-component-matrix
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          backstage_url: ${{ secrets.BACKSTAGE_URL }}
+    outputs:
+      matrix: ${{ steps.component_matrix.outputs.output }}
+
+  build:
+    name: Static Analysis
+    runs-on: [self-hosted, light]
+    needs: scheduler
+    strategy:
+      matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - run: echo "Run for ${{ matrix.component }} at ${{ matrix.path }}"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Setup repo variables (.env.example)
+        run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
+      - name: Setup component variables (.env.example)
+        working-directory: ${{ matrix.path }}
+        run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
+      - name: Setup repo variables (Makefile)
+        run: test -f Makefile && make env >> "$GITHUB_ENV" || true
+      - name: Setup component variables (Makefile)
+        working-directory: ${{ matrix.path }}
+        run: test -f Makefile && make env >> "$GITHUB_ENV" || true
+      - name: Run Slither
+        uses: aurora-is-near/slither-action@main
+        if: always() && matrix.runSlither
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        id: slither
+        with:
+          target: ${{ matrix.nodeRoot }}
+          node-version: 18
+          slither-args: '--filter-paths "node_modules|testing|test" --exclude timestamp,solc-version,naming-convention,assembly-usage'
+      - name: Run Clippy
+        if: always() && matrix.runClippy
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        id: clippy
+        working-directory: ${{ matrix.path }}
+        run: cargo clippy --no-deps --lib -- -D clippy::as_conversions
+      - name: Setup Go
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        uses: WillAbides/setup-go-faster@v1.8.0
+        if: always() && matrix.runGoStaticChecks
+        id: setup-go
+        with:
+          go-version: ${{ matrix.goVersion}}
+      - name: Run Go Vet
+        if: always() && matrix.runGoStaticChecks
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        id: go-vet
+        run: "go vet ./${{ matrix.path }}/..."
+      - name: Run Go Staticcheck
+        uses: dominikh/staticcheck-action@v1.2.0
+        if: always() && matrix.runGoStaticChecks
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        id: go-staticcheck
+        with:
+          working-directory: ${{ matrix.path }}
+          install-go: false
