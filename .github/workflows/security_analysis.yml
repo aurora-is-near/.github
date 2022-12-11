@@ -62,7 +62,10 @@ jobs:
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: udeps
         working-directory: ${{ matrix.path }}
-        run: cargo udeps --all-features
+        run: |
+          cargo install --force cargo-udeps
+          echo "start cargo udeps run"
+          cargo udeps --all-features --all-targets
       - name: Setup Go
         continue-on-error: ${{ matrix.allowTestsToFail }}
         uses: WillAbides/setup-go-faster@v1.8.0
