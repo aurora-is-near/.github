@@ -41,13 +41,14 @@ jobs:
         working-directory: ${{ matrix.path }}
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
       - name: Run Slither
-        uses: aurora-is-near/slither-action@main
+        uses: crytic/slither-action@main
         if: always() && matrix.runSlither
         id: slither
         with:
           target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: '--filter-paths "node_modules|testing|test|lib" --exclude timestamp,solc-version,naming-convention,assembly-usage'
+          solc-version: 0.7.4
       - name: Run Clippy
         if: always() && matrix.runClippy
         id: clippy
