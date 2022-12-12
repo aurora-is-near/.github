@@ -50,7 +50,7 @@ jobs:
         with:
           target: ${{ matrix.nodeRoot }}
           node-version: 18
-          slither-args: '--filter-paths "node_modules|testing|test" --exclude timestamp,solc-version,naming-convention,assembly-usage'
+          slither-args: '--filter-paths "node_modules|testing|test|lib" --exclude timestamp,solc-version,naming-convention,assembly-usage'
       - name: Run Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
