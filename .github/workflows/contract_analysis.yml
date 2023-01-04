@@ -2,6 +2,11 @@ name: Smart Contract Security Analysis
 
 on:
   workflow_call:
+    inputs:
+      force_all_checks:
+        required: false
+        type: string
+        description: "Trigger all checks even if files are unchanged"
 
 jobs:
   scheduler:
@@ -16,6 +21,7 @@ jobs:
           helper: generate-component-matrix
           github_token: ${{ secrets.GITHUB_TOKEN }}
           backstage_url: ${{ secrets.BACKSTAGE_URL }}
+          force_all_checks: ${{ inputs.force_all_checks }}
     outputs:
       matrix: ${{ steps.component_matrix.outputs.output }}
 
