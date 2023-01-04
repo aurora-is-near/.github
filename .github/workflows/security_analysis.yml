@@ -2,6 +2,11 @@ name: Quality & Security Analysis
 
 on:
   workflow_call:
+    inputs:
+      force_all_checks:
+        required: false
+        type: string
+        description: "Trigger all checks even if files are unchanged"
 
 jobs:
   scheduler:
