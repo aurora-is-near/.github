@@ -6,6 +6,7 @@ on:
 jobs:
   scheduler:
     name: Backstage
+
     runs-on: [self-hosted, light]
     steps:
       - name: Checkout
@@ -16,6 +17,7 @@ jobs:
           helper: generate-component-matrix
           github_token: ${{ secrets.GITHUB_TOKEN }}
           backstage_url: ${{ secrets.BACKSTAGE_URL }}
+          force_all_checks: ${{ inputs.force_all_checks }}
     outputs:
       matrix: ${{ steps.component_matrix.outputs.output }}
 
