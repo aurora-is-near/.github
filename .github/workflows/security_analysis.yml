@@ -58,6 +58,10 @@ jobs:
           target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: ${{ matrix.slitherArgs }}
+      - uses: webfactory/ssh-agent@v0.7.0
+        if: always()
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Run Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
