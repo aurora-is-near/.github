@@ -92,3 +92,5 @@ jobs:
         with:
           working-directory: ${{ matrix.path }}
           install-go: false
+          cache-key: ${{ matrix.goVersion}}
+          min-go-version: ${{ matrix.goVersion}}
