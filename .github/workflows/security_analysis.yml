@@ -85,7 +85,7 @@ jobs:
         id: go-vet
         run: "go vet ./${{ matrix.path }}/..."
       - name: Run Go Staticcheck
-        uses: dominikh/staticcheck-action@v1.2.0
+        uses: dominikh/staticcheck-action@v1.3.0
         if: always() && matrix.runGoStaticChecks
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: go-staticcheck
