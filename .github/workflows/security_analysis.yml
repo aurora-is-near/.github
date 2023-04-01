@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         description: "Trigger all checks even if files are unchanged"
+      ignore_failures:
+        required: false
+        type: string
+        description: "Don't block CI on failed security checks"
 
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: true
@@ -34,6 +38,7 @@ jobs:
           backstage_url: ${{ secrets.BACKSTAGE_URL }}
           backstage_entities_repo: aurora-is-near/${{env.ENTITIES_REPO}}
           force_all_checks: ${{ inputs.force_all_checks }}
+          ignore_failures: ${{ inputs.ignore_failures }}
     outputs:
       matrix: ${{ steps.component_matrix.outputs.output }}
 
@@ -79,7 +84,7 @@ jobs:
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy
         working-directory: ${{ matrix.path }}
-        run: cargo clippy --no-deps --lib -- -D clippy::as_conversions
+        run: cargo clippy --all-targets --no-deps --lib -- -D clippy::as_conversions
       - name: Run Clippy (all)
         if: always() && matrix.runClippy
         continue-on-error: true
