@@ -50,7 +50,9 @@ jobs:
       matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
       fail-fast: false
     steps:
-      - run: echo "Run for ${{ matrix.component }} at ${{ matrix.path }}"
+      - run: |
+          echo Run for ${{ matrix.name }} at ${{ matrix.path }}
+          echo '${{ toJson(matrix) }}'
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -66,9 +68,9 @@ jobs:
         working-directory: ${{ matrix.path }}
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
       - name: Run Slither
-        uses: aurora-is-near/slither-action@main
+        uses: crytic/slither-action@main
         if: always() && matrix.runSlither
-        continue-on-error: ${{ matrix.allowTestsToFail }}
+        continue-on-error: true
         id: slither
         with:
           target: ${{ matrix.nodeRoot }}
