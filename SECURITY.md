@@ -20,10 +20,7 @@ Thank you for taking the time to responsibly disclose any vulnerabilities you fi
 We call on you to help us find bugs in our smart contracts code and app, securely report it to us and work with us in accordance with rules of our Bug Bounty Program. 
 That will allow us not only to recognize you and your skill on our website, but also reward you for all the hard work!
 
-Detailed description of our Bug Bounty Program including issues, payment policy, eligibility and out of scope items can be found [here](https://hackenproof.com/aurora). 
-
-Assets in Scope for Bug Bounty Program can be found [here](https://github.com/aurora-is-near/aurora-security-public/blob/main/ABBP-AssetsInScope.md).
-
+Detailed description of our Bug Bounty Program including issues, payment policy, eligibility and the scope can be found [here](https://hackenproof.com/aurora).
 
 ## Known Issues
 
