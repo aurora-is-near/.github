@@ -112,6 +112,6 @@ jobs:
         with:
           version: "2022.1.3"
           working-directory: ${{ matrix.path }}
-          install-go: false
+          install-go: true
           cache-key: ${{ matrix.goVersion}}
           min-go-version: ${{ matrix.goVersion}}
