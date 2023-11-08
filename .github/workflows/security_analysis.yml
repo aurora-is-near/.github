@@ -17,6 +17,7 @@ env:
 
 jobs:
   scheduler:
+    runs-on: ubuntu-latest
     name: Backstage
     steps:
       - name: Checkout
@@ -42,6 +43,7 @@ jobs:
 
   build:
     name: Static Analysis
+    runs-on: ubuntu-latest
     needs: scheduler
     strategy:
       matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
