@@ -18,8 +18,7 @@ env:
 jobs:
   scheduler:
     name: Backstage
-
-    runs-on: [self-hosted, light]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -44,7 +43,7 @@ jobs:
 
   build:
     name: Static Analysis
-    runs-on: [self-hosted, light]
+    runs-on: ubuntu-latest
     needs: scheduler
     strategy:
       matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
