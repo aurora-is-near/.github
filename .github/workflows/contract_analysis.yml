@@ -79,7 +79,7 @@ jobs:
       - name: Install Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        id: clippy
+        id: clippy-install
         working-directory: ${{ matrix.path }}
         run: cargo install clippy
       - name: Run Clippy
