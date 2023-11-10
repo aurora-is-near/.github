@@ -1,5 +1,4 @@
 name: Quality & Security Analysis
-
 on:
   workflow_call:
     inputs:
@@ -11,10 +10,8 @@ on:
         required: false
         type: string
         description: "Don't block CI on failed security checks"
-
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: true
-
 jobs:
   scheduler:
     name: Backstage
@@ -40,7 +37,6 @@ jobs:
           ignore_failures: ${{ inputs.ignore_failures }}
     outputs:
       matrix: ${{ steps.component_matrix.outputs.output }}
-
   build:
     name: Static Analysis
     runs-on: ubuntu-latest
@@ -80,6 +76,12 @@ jobs:
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install Clippy
+        if: always() && matrix.runClippy
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        id: clippy
+        working-directory: ${{ matrix.path }}
+        run: cargo install clippy
       - name: Run Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
