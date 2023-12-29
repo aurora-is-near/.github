@@ -93,7 +93,7 @@ jobs:
         continue-on-error: true
         id: clippy-all
         working-directory: ${{ matrix.path }}
-        run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all || true
+        run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic || true
       - name: Setup Go
         continue-on-error: ${{ matrix.allowTestsToFail }}
         uses: WillAbides/setup-go-faster@v1.12.0
