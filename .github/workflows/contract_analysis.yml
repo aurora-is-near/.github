@@ -65,7 +65,7 @@ jobs:
       - name: Run Slither
         uses: crytic/slither-action@main
         if: always() && matrix.runSlither
-        continue-on-error: true
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: slither
         with:
           target: ${{ matrix.nodeRoot }}
