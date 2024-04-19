@@ -18,13 +18,14 @@ jobs:
     name: Backstage
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - uses: webfactory/ssh-agent@v0.7.0
-        if: always()
+        uses: actions/checkout@v4
+
+      - uses: webfactory/ssh-agent@v0.9.0
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.BACKSTAGE_ENTITIES_SSH_KEY }}
-      - uses: aurora-is-near/github-helpers@main
+
+      - uses: aurora-is-near/backstage-blockchain-actions@v1
         id: component_matrix
         env:
           ENTITIES_REPO: ${{ github.repository_visibility == 'private' && 'backstage-entities-private' || 'backstage-entities' }}
@@ -37,6 +38,7 @@ jobs:
           ignore_failures: ${{ inputs.ignore_failures }}
     outputs:
       matrix: ${{ steps.component_matrix.outputs.output }}
+
   build:
     name: Static Analysis
     runs-on: ubuntu-latest
@@ -48,22 +50,26 @@ jobs:
       - run: |
           echo Run for ${{ matrix.name }} at ${{ matrix.path }}
           echo '${{ toJson(matrix) }}'
+
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
+
       - name: Setup repo variables (.env.example)
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
       - name: Setup component variables (.env.example)
         working-directory: ${{ matrix.path }}
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
+
       - name: Setup repo variables (Makefile)
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
       - name: Setup component variables (Makefile)
         working-directory: ${{ matrix.path }}
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
+
       - name: Run Slither
-        uses: crytic/slither-action@main
+        uses: crytic/slither-action@v0.3.2
         if: always() && matrix.runSlither
         continue-on-error: true
         id: slither
@@ -71,7 +77,8 @@ jobs:
           target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: ${{ matrix.slitherArgs }}
-      - uses: webfactory/ssh-agent@v0.7.0
+
+      - uses: webfactory/ssh-agent@v0.9.0
         if: always()
         continue-on-error: true
         with:
@@ -82,38 +89,42 @@ jobs:
         id: clippy-install
         working-directory: ${{ matrix.path }}
         run: rustup component add clippy-preview
+
       - name: Run Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy
         working-directory: ${{ matrix.path }}
         run: cargo clippy --all-targets --no-deps --lib -- -D clippy::as_conversions
+
       - name: Run Clippy (all)
         if: always() && matrix.runClippy
         continue-on-error: true
         id: clippy-all
         working-directory: ${{ matrix.path }}
         run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic || true
+
       - name: Setup Go
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        uses: WillAbides/setup-go-faster@v1.12.0
+        uses: WillAbides/setup-go-faster@v1.14.0
         if: always() && matrix.runGoStaticChecks
         id: setup-go
         with:
-          go-version: ${{ matrix.goVersion}}
+          go-version: ${{ matrix.goVersion }}
+
       - name: Run Go Vet
         if: always() && matrix.runGoStaticChecks
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: go-vet
         run: "go vet ./${{ matrix.path }}/..."
+
       - name: Run Go Staticcheck
-        uses: dominikh/staticcheck-action@v1.3.0
+        uses: dominikh/staticcheck-action@v1
         if: always() && matrix.runGoStaticChecks
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: go-staticcheck
         with:
           version: "2023.1.6"
-          working-directory: ${{ matrix.path }}
           install-go: false
-          cache-key: ${{ matrix.goVersion}}
-          min-go-version: ${{ matrix.goVersion}}
+          cache-key: ${{ matrix.goVersion }}
+          working-directory: ${{ matrix.path }}
