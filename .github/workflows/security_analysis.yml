@@ -136,6 +136,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install Node deps
+        run: yarn
+
       - name: Install eslint
         id: eslint-install
         run: npm install -g eslint @eslint/js typescript typescript-eslint @tsconfig/node18
