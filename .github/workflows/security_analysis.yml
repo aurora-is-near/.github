@@ -12,6 +12,7 @@ on:
         description: "Don't block CI on failed security checks"
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: true
+
 jobs:
   scheduler:
     runs-on: ubuntu-latest
@@ -25,7 +26,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.BACKSTAGE_ENTITIES_SSH_KEY }}
 
-      - uses: aurora-is-near/github-helpers@main
+      - uses: aurora-is-near/backstage-blockchain-actions@main
         id: component_matrix
         env:
           ENTITIES_REPO: ${{ github.repository_visibility == 'private' && 'backstage-entities-private' || 'backstage-entities' }}
@@ -143,3 +144,39 @@ jobs:
         id: node-eslint
         continue-on-error: ${{ matrix.allowTestsToFail }}
         run: npx eslint .
+
+      - name: Mark Component as Analyzed
+        if: always()
+        run: echo "completed" > /tmp/${{ matrix.name }}_analyzed.flag
+
+  verify-coverage:
+    name: Verify Coverage Completeness
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: List Expected Components
+        run: |
+          echo "${{ needs.scheduler.outputs.matrix }}" | jq -r '.[].name' > /tmp/expected_components.txt
+
+      - name: List Analyzed Components
+        run: |
+          ls /tmp | grep '_analyzed.flag' | sed 's/_analyzed.flag//' > /tmp/analyzed_components.txt
+
+      - name: Check for Incomplete Coverage
+        run: |
+          missing=false
+
+          # Compare expected components to analyzed components
+          while IFS= read -r component; do
+            if ! grep -q "^$component$" /tmp/analyzed_components.txt; then
+              echo "Component missing analysis: $component"
+              missing=true
+            fi
+          done < /tmp/expected_components.txt
+
+          if [ "$missing" = true ]; then
+            echo "Incomplete coverage: Some components were not analyzed."
+            exit 1
+          else
+            echo "Full coverage: All components analyzed successfully."
+          fi
