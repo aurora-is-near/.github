@@ -48,11 +48,6 @@ jobs:
       matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
       fail-fast: false
     steps:
-      - name: Checkout Workflow Repository
-        uses: actions/checkout@v4
-        with:
-          repository: aurora-is-near/.github
-          path: workflow-repo
       - run: |
           echo Run for ${{ matrix.name }} at ${{ matrix.path }}
           echo '${{ toJson(matrix) }}'
@@ -61,18 +56,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          path: target-repo
 
       - name: Setup repo variables (.env.example)
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
       - name: Setup component variables (.env.example)
-        working-directory: target-repo/${{ matrix.path }}
+        working-directory: ${{ matrix.path }}
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
 
       - name: Setup repo variables (Makefile)
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
       - name: Setup component variables (Makefile)
-        working-directory: target-repo/${{ matrix.path }}
+        working-directory: ${{ matrix.path }}
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
 
       - name: Run Slither
@@ -81,7 +75,7 @@ jobs:
         continue-on-error: true
         id: slither
         with:
-          target: target-repo/${{ matrix.nodeRoot }}
+          target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: ${{ matrix.slitherArgs }}
 
@@ -94,21 +88,21 @@ jobs:
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy-install
-        working-directory: target-repo/${{ matrix.path }}
+        working-directory: ${{ matrix.path }}
         run: rustup component add clippy-preview
 
       - name: Run Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy
-        working-directory: target-repo/${{ matrix.path }}
+        working-directory: ${{ matrix.path }}
         run: cargo clippy --all-targets --no-deps --lib -- -D clippy::as_conversions
 
       - name: Run Clippy (all)
         if: always() && matrix.runClippy
         continue-on-error: true
         id: clippy-all
-        working-directory: target-repo/${{ matrix.path }}
+        working-directory: ${{ matrix.path }}
         run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic || true
 
       - name: Setup Go
@@ -148,6 +142,8 @@ jobs:
 
       - name: Run eslint
         id: node-eslint
-        working-directory: target-repo/${{ matrix.path }}
+        working-directory: ${{ matrix.nodeRoot }}
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        run: npx eslint . --config ../workflow-repo/eslint.config.mjs
+        run: npx eslint .
+        env:
+          ESLINT_USE_FLAT_CONFIG: false
