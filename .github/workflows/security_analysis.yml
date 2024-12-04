@@ -48,6 +48,11 @@ jobs:
       matrix: ${{ fromJson(needs.scheduler.outputs.matrix) }}
       fail-fast: false
     steps:
+      - name: Checkout Workflow Repository
+        uses: actions/checkout@v4
+        with:
+          repository: aurora-is-near/.github
+          path: workflow-repo
       - run: |
           echo Run for ${{ matrix.name }} at ${{ matrix.path }}
           echo '${{ toJson(matrix) }}'
@@ -134,7 +139,7 @@ jobs:
         id: setup-node
         uses: actions/setup-node@v4
         with:
-          version: 18
+          node-version: 18
 
       - name: Install eslint
         id: eslint-install
@@ -143,4 +148,4 @@ jobs:
       - name: Run eslint
         id: node-eslint
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        run: npx eslint .
+        run: npx eslint . --config ../workflow-repo/eslint.config.mjs
