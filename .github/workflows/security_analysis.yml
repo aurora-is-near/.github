@@ -135,6 +135,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+      - name: Install Node dependencies
+        run: npm ci
 
       - name: Install eslint
         id: eslint-install
