@@ -148,4 +148,4 @@ jobs:
       - name: Run eslint
         id: node-eslint
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        run: npx eslint . --config ../workflow-repo/eslint.config.mjs
+        run: npx eslint . --config ./workflow-repo/eslint.config.mjs
