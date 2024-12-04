@@ -128,3 +128,18 @@ jobs:
           install-go: false
           cache-key: ${{ matrix.goVersion }}
           working-directory: ${{ matrix.path }}
+
+      - name: Setup Node
+        id: setup-node
+        uses: actions/setup-node@v4
+        with:
+          version: 18
+
+      - name: Install eslint
+        id: eslint-install
+        run: npm install -g eslint @eslint/js typescript typescript-eslint @tsconfig/node18
+
+      - name: Run eslint
+        id: node-eslint
+        continue-on-error: ${{ matrix.allowTestsToFail }}
+        run: npx eslint .
