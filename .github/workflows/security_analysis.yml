@@ -68,6 +68,10 @@ jobs:
         working-directory: ${{ matrix.path }}
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
 
+      - name: Install Foundry
+        if: always() && matrix.runSlither
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Run Slither
         uses: crytic/slither-action@v0.3.2
         if: always() && matrix.runSlither
