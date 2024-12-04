@@ -136,7 +136,7 @@ jobs:
         with:
           node-version: 18
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Install eslint
         id: eslint-install
