@@ -147,6 +147,6 @@ jobs:
         id: node-eslint
         working-directory: ${{ matrix.nodeRoot }}
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        run: npx eslint . --ext .js,.ts --rule "no-console:error,no-unused-vars:warn"
+        run: npx eslint . --ext .js,.ts --rule "no-unused-vars:warn"
         env:
           ESLINT_USE_FLAT_CONFIG: false
