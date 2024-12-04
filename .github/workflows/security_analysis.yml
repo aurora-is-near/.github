@@ -141,15 +141,12 @@ jobs:
 
       - name: Install eslint
         id: eslint-install
-        run: npm install -g eslint @eslint/js typescript typescript-eslint @tsconfig/node18
+        run: npm install -g eslint @eslint/js typescript typescript-eslint
 
       - name: Run eslint
         id: node-eslint
         working-directory: ${{ matrix.nodeRoot }}
         continue-on-error: ${{ matrix.allowTestsToFail }}
+        run: npx eslint . --ext .js,.ts --rule "no-console:error,no-unused-vars:warn"
         env:
           ESLINT_USE_FLAT_CONFIG: false
-        run: |
-          npx eslint . --ext .js,.ts --config <(echo '{
-            "extends": ["@tsconfig/node18"]
-          }')
