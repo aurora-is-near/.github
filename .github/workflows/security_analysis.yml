@@ -155,6 +155,6 @@ jobs:
         id: node-eslint
         working-directory: ${{ matrix.nodeRoot }}
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        run: yarn eslint . -c workflow/eslint.config.js
+        run: yarn eslint . -c workflow/eslint.config.mjs
         env:
           ESLINT_USE_FLAT_CONFIG: true
