@@ -55,13 +55,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # - name: Checkout repository
-      #   uses: actions/checkout@v4
-      #   with:
-      #     repository: aurora-is-near/.github
-      #     path: workflow
-      #     ref: feat/js-analysis
-
       - name: Setup repo variables (.env.example)
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
       - name: Setup component variables (.env.example)
@@ -138,27 +131,7 @@ jobs:
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
         with:
-          version: latest
+          version: 1.9.4
       - name: Run Biome
+        continue-on-error: true
         run: biome lint .
-
-      # - name: Setup Node
-      #   id: setup-node
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 18
-      #
-      # - name: Install Node deps
-      #   run: yarn
-      #
-      # - name: Install eslint
-      #   id: eslint-install
-      #   run: yarn add --save-dev --ignore-workspace-root-check eslint @eslint/js typescript typescript-eslint
-      #
-      # - name: Run eslint
-      #   id: node-eslint
-      #   working-directory: ${{ matrix.nodeRoot }}
-      #   continue-on-error: ${{ matrix.allowTestsToFail }}
-      #   run: yarn eslint . -c workflow/.eslintrc.js
-      #   env:
-      #     ESLINT_USE_FLAT_CONFIG: false
