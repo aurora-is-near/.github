@@ -62,9 +62,6 @@ jobs:
       #     path: workflow
       #     ref: feat/js-analysis
 
-      - run: ls -a .
-      - run: ls -a workflow
-
       - name: Setup repo variables (.env.example)
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
       - name: Setup component variables (.env.example)
