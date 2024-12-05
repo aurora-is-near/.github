@@ -149,7 +149,7 @@ jobs:
 
       - name: Install eslint
         id: eslint-install
-        run: yarn add --save-dev eslint @eslint/js typescript typescript-eslint
+        run: yarn add --save-dev --ignore-workspace-root-check eslint @eslint/js typescript typescript-eslint
 
       - name: Run eslint
         id: node-eslint
