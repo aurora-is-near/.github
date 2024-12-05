@@ -54,8 +54,15 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          repository: aurora-is-near/.github
+          path: workflow
+
+      - run: ls .
+      - run: ls workflow
 
       - name: Setup repo variables (.env.example)
         run: test -f .env.example && cat .env.example >> "$GITHUB_ENV" || true
