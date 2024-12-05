@@ -138,6 +138,13 @@ jobs:
           cache-key: ${{ matrix.goVersion }}
           working-directory: ${{ matrix.path }}
 
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+      - name: Run Biome
+        run: biome ci .
+
       - name: Setup Node
         id: setup-node
         uses: actions/setup-node@v4
