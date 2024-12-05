@@ -12,6 +12,7 @@ on:
         description: "Don't block CI on failed security checks"
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: true
+
 jobs:
   scheduler:
     runs-on: ubuntu-latest
@@ -128,3 +129,11 @@ jobs:
           install-go: false
           cache-key: ${{ matrix.goVersion }}
           working-directory: ${{ matrix.path }}
+
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: 1.9.4
+      - name: Run Biome
+        continue-on-error: true
+        run: biome lint .
