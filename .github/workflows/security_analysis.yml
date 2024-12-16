@@ -153,10 +153,10 @@ jobs:
           export NOW="$(date +%s)"
           if [ "${{secrets.DD_API_KEY}}" != "" ]; then
             curl -X POST "https://api.datadoghq.eu/api/v2/series" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "DD-API-KEY: ${{secrets.DD_API_KEY}}" \
-            -d @- << EOF
+              -H "Accept: application/json" \
+              -H "Content-Type: application/json" \
+              -H "DD-API-KEY: ${{ secrets.DD_API_KEY }}" \
+              -d @- <<EOF
             {
               "series": [
                 {
