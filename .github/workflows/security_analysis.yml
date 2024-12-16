@@ -148,7 +148,7 @@ jobs:
             [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_vet.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || \
-            [ "${{ steps.biom.conclusion }}" == "failure" ]; then
+            [ "${{ steps.biome.conclusion }}" == "failure" ]; then
             export dd_metric_value=1
           else
             export dd_metric_value=0
