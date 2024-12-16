@@ -75,7 +75,7 @@ jobs:
         continue-on-error: true
         id: slither
         with:
-          target: ${{ matrix.nodeRoot == '' && '.' || matrix.nodeRoot }}
+          target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: ${{ matrix.slitherArgs }}
 
@@ -101,10 +101,10 @@ jobs:
 
       - name: Run Clippy (all)
         if: always() && matrix.runClippy
-        continue-on-error: true
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy_all
         working-directory: ${{ matrix.path }}
-        run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic || true
+        run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic
 
       - name: Setup Go
         continue-on-error: ${{ matrix.allowTestsToFail }}
@@ -133,11 +133,13 @@ jobs:
 
       - name: Setup Biome
         id: biome_setup
+        if: always() && matrix.runBiome
         uses: biomejs/setup-biome@v2
         with:
           version: 1.9.4
       - name: Run Biome
         id: biome
+        if: always() && matrix.runBiome
         continue-on-error: true
         run: biome lint .
 
