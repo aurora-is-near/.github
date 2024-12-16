@@ -10,6 +10,10 @@ on:
         required: false
         type: string
         description: "Don't block CI on failed security checks"
+    secrets:
+      DD_API_KEY:
+        description: "Datadog API key for submitting analysis metric"
+        required: false
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: true
 
