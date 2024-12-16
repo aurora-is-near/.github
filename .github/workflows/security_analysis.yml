@@ -152,29 +152,29 @@ jobs:
           # Template variables
           export NOW="$(date +%s)"
           # Curl command
-          curl -X POST "https://api.datadoghq.com/api/v2/series" \
-          -H "Accept: application/json" \
-          -H "Content-Type: application/json" \
-          -H "DD-API-KEY: ${{secrets.DD_API_KEY}}" \
-          -d @- << EOF
-          {
-            "series": [
-              {
-                "metric": "gha.workflow.outcome",
-                "type": 1,
-                "points": [
-                  {
-                    "timestamp": $NOW,
-                    "value": $dd_metric_value
-                  }
-                ],
-                "resources": [
-                  {
-                    "name": "${{ matrix.name }}",
-                    "type": "component"
-                  }
-                ]
-              }
-            ]
-          }
-          EOF
+          curl -X POST "https://api.datadoghq.eu/api/v2/series" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "DD-API-KEY: ${{secrets.DD_API_KEY}}" \
+            -d @- << EOF
+            {
+              "series": [
+                {
+                  "metric": "gha.workflow.outcome",
+                  "type": 1,
+                  "points": [
+                    {
+                      "timestamp": $NOW,
+                      "value": $dd_metric_value
+                    }
+                  ],
+                  "resources": [
+                    {
+                      "name": "${{ matrix.name }}",
+                      "type": "component"
+                    }
+                  ]
+                }
+              ]
+            }
+            EOF
