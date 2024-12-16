@@ -131,9 +131,11 @@ jobs:
           working-directory: ${{ matrix.path }}
 
       - name: Setup Biome
+        if: always() && matrix.runBiome
         uses: biomejs/setup-biome@v2
         with:
           version: 1.9.4
       - name: Run Biome
+        if: always() && matrix.runBiome
         continue-on-error: true
         run: biome lint .
