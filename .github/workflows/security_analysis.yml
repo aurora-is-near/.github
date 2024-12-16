@@ -142,9 +142,9 @@ jobs:
         if: always()
         run: |
           if [ "${{ job.status }}" == "success" ]; then
-            dd_metric_value=0
+            export dd_metric_value=0
           else
-            dd_metric_value=1
+            export dd_metric_value=1
           fi
 
           ## Dynamic Points
@@ -164,8 +164,8 @@ jobs:
                 "type": 1,
                 "points": [
                   {
-                    "timestamp": ${NOW},
-                    "value": ${dd_metric_value}
+                    "timestamp": $NOW,
+                    "value": $dd_metric_value
                   }
                 ],
                 "resources": [
