@@ -145,6 +145,7 @@ jobs:
 
       - name: Send Datadog Metric
         if: always()
+        continue-on-error: true
         run: |
           if [ "${{ steps.clippy.conclusion }}" == "failure" ] || \
             [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
