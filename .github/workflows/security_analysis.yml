@@ -131,20 +131,22 @@ jobs:
           working-directory: ${{ matrix.path }}
 
       - name: Setup Biome
+        id: biome_setup
         uses: biomejs/setup-biome@v2
         with:
           version: 1.9.4
       - name: Run Biome
+        id: biome
         continue-on-error: true
         run: biome lint .
 
       - name: Send Datadog Metric
         if: always()
         run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            export dd_metric_value=0
-          else
+          if [ "${{ steps.biome.outcome }}" == "failure" ]; then
             export dd_metric_value=1
+          else
+            export dd_metric_value=0
           fi
 
           export NOW="$(date +%s)"
