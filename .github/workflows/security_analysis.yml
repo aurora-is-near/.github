@@ -144,38 +144,40 @@ jobs:
       - name: Send Datadog Metric
         if: always()
         run: |
-          if [ "${{ steps.clippy.conclusion }}" == "failure" ] || [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || [ "${{ steps.go_vet.conclusion }}" == "failure" ] || [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || [ "${{ steps.biome.conclusion }}" == "failure" ]; then
+          if [ "${{ steps.clippy.conclusion }}" == "failure" ] || \
+            [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
+            [ "${{ steps.go_vet.conclusion }}" == "failure" ] || \
+            [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || \
+            [ "${{ steps.biom.conclusion }}" == "failure" ]; then
             export dd_metric_value=1
           else
             export dd_metric_value=0
           fi
 
           export NOW="$(date +%s)"
-          if [ "${{secrets.DD_API_KEY}}" != "" ]; then
-            curl -X POST "https://api.datadoghq.eu/api/v2/series" \
-              -H "Accept: application/json" \
-              -H "Content-Type: application/json" \
-              -H "DD-API-KEY: ${{ secrets.DD_API_KEY }}" \
-              -d @- <<EOF
-            {
-              "series": [
-                {
-                  "metric": "gha.workflow.outcome",
-                  "type": 1,
-                  "points": [
-                    {
-                      "timestamp": $NOW,
-                      "value": $dd_metric_value
-                    }
-                  ],
-                  "resources": [
-                    {
-                      "name": "${{ matrix.name }}",
-                      "type": "component"
-                    }
-                  ]
-                }
-              ]
-            }
-            EOF
-          fi
+          curl -X POST "https://api.datadoghq.eu/api/v2/series" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "DD-API-KEY: ${{secrets.DD_API_KEY}}" \
+          -d @- << EOF
+          {
+            "series": [
+              {
+                "metric": "gha.workflow.outcome",
+                "type": 1,
+                "points": [
+                  {
+                    "timestamp": $NOW,
+                    "value": $dd_metric_value
+                  }
+                ],
+                "resources": [
+                  {
+                    "name": "${{ matrix.name }}",
+                    "type": "component"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
