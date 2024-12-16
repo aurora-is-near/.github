@@ -84,10 +84,11 @@ jobs:
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Install Clippy
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        id: clippy-install
+        id: clippy_setup
         working-directory: ${{ matrix.path }}
         run: rustup component add clippy-preview
 
@@ -101,7 +102,7 @@ jobs:
       - name: Run Clippy (all)
         if: always() && matrix.runClippy
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        id: clippy-all
+        id: clippy_all
         working-directory: ${{ matrix.path }}
         run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic
 
@@ -109,21 +110,21 @@ jobs:
         continue-on-error: ${{ matrix.allowTestsToFail }}
         uses: WillAbides/setup-go-faster@v1.14.0
         if: always() && matrix.runGoStaticChecks
-        id: setup-go
+        id: go_setup
         with:
           go-version: ${{ matrix.goVersion }}
 
       - name: Run Go Vet
         if: always() && matrix.runGoStaticChecks
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        id: go-vet
+        id: go_vet
         run: "go vet ./${{ matrix.path }}/..."
 
       - name: Run Go Staticcheck
         uses: dominikh/staticcheck-action@v1
         if: always() && matrix.runGoStaticChecks
         continue-on-error: ${{ matrix.allowTestsToFail }}
-        id: go-staticcheck
+        id: go_staticcheck
         with:
           version: "2023.1.6"
           install-go: false
@@ -131,11 +132,55 @@ jobs:
           working-directory: ${{ matrix.path }}
 
       - name: Setup Biome
+        id: biome_setup
         if: always() && matrix.runBiome
         uses: biomejs/setup-biome@v2
         with:
           version: 1.9.4
       - name: Run Biome
+        id: biome
         if: always() && matrix.runBiome
         continue-on-error: true
         run: biome lint .
+
+      - name: Send Datadog Metric
+        if: always()
+        continue-on-error: true
+        run: |
+          if [ "${{ steps.clippy.conclusion }}" == "failure" ] || \
+            [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
+            [ "${{ steps.go_vet.conclusion }}" == "failure" ] || \
+            [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || \
+            [ "${{ steps.biome.conclusion }}" == "failure" ]; then
+            export dd_metric_value=1
+          else
+            export dd_metric_value=0
+          fi
+
+          export NOW="$(date +%s)"
+          curl -X POST "https://api.datadoghq.eu/api/v2/series" \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -H "DD-API-KEY: ${{secrets.DD_API_KEY}}" \
+          -d @- << EOF
+          {
+            "series": [
+              {
+                "metric": "gha.workflow.outcome",
+                "type": 1,
+                "points": [
+                  {
+                    "timestamp": $NOW,
+                    "value": $dd_metric_value
+                  }
+                ],
+                "resources": [
+                  {
+                    "name": "${{ matrix.name }}",
+                    "type": "component"
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
