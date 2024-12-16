@@ -75,7 +75,7 @@ jobs:
         continue-on-error: true
         id: slither
         with:
-          target: ${{ matrix.nodeRoot == '' && '.' || matrix.nodeRoot }}
+          target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: ${{ matrix.slitherArgs }}
 
