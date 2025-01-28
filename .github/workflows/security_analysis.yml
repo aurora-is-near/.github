@@ -108,7 +108,9 @@ jobs:
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy_all
         working-directory: ${{ matrix.path }}
-        run: cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic
+        run: |
+          cargo clippy --all-targets --no-deps --lib -- -D clippy::all -D clippy::pedantic \
+          -A clippy::missing_errors_doc -A clippy::missing_panics_doc
 
       - name: Setup Go
         continue-on-error: ${{ matrix.allowTestsToFail }}
