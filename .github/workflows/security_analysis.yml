@@ -132,7 +132,7 @@ jobs:
         continue-on-error: ${{ matrix.allowTestsToFail }}
         id: go_staticcheck
         with:
-          version: "2023.1.6"
+          version: "2024.1.1"
           install-go: false
           cache-key: ${{ matrix.goVersion }}
           working-directory: ${{ matrix.path }}
