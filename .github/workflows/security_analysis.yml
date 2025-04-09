@@ -156,6 +156,7 @@ jobs:
         run: |
           if [ "${{ steps.clippy.conclusion }}" == "failure" ] || \
             [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
+            [ "${{ steps.slither.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_vet.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || \
             [ "${{ steps.biome.conclusion }}" == "failure" ]; then
