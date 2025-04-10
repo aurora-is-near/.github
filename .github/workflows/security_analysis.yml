@@ -77,7 +77,7 @@ jobs:
         uses: crytic/slither-action@v0.4.1
         id: slither
         if: ${{ !cancelled() && matrix.runSlither }}
-        continue-on-error: true
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         with:
           target: ${{ matrix.nodeRoot }}
           node-version: 18
@@ -151,12 +151,12 @@ jobs:
         run: biome lint .
 
       - name: Send Datadog Metric
-        if: always()
+        if: ${{ !cancelled() }}
         continue-on-error: true
         run: |
           if [ "${{ steps.clippy.conclusion }}" == "failure" ] || \
             [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
-            [ "${{ steps.slither.outcome }}" == "failure" ] || \
+            [ "${{ steps.slither.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_vet.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || \
             [ "${{ steps.biome.conclusion }}" == "failure" ]; then
