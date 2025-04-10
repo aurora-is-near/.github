@@ -75,13 +75,13 @@ jobs:
 
       - name: Run Slither
         uses: crytic/slither-action@v0.4.1
-        if: always() && matrix.runSlither
         id: slither
+        if: ${{ !cancelled() && matrix.runSlither }}
+        continue-on-error: true
         with:
           target: ${{ matrix.nodeRoot }}
           node-version: 18
           slither-args: ${{ matrix.slitherArgs }}
-          fail-on: all
 
       - uses: webfactory/ssh-agent@v0.9.0
         if: always()
@@ -156,7 +156,7 @@ jobs:
         run: |
           if [ "${{ steps.clippy.conclusion }}" == "failure" ] || \
             [ "${{ steps.clippy_all.conclusion }}" == "failure" ] || \
-            [ "${{ steps.slither.conclusion }}" == "failure" ] || \
+            [ "${{ steps.slither.outcome }}" == "failure" ] || \
             [ "${{ steps.go_vet.conclusion }}" == "failure" ] || \
             [ "${{ steps.go_staticcheck.conclusion }}" == "failure" ] || \
             [ "${{ steps.biome.conclusion }}" == "failure" ]; then
