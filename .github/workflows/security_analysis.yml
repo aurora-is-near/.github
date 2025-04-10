@@ -84,29 +84,29 @@ jobs:
           slither-args: ${{ matrix.slitherArgs }}
 
       - uses: webfactory/ssh-agent@v0.9.0
-        if: always()
+        if: ${{ !cancelled() }}
         continue-on-error: true
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Install Clippy
-        if: always() && matrix.runClippy
-        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy_setup
+        if: ${{ !cancelled() && matrix.runClippy }}
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         working-directory: ${{ matrix.path }}
         run: rustup component add clippy-preview
 
       - name: Run Clippy
-        if: always() && matrix.runClippy
-        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy
+        if: ${{ !cancelled() && matrix.runClippy }}
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         working-directory: ${{ matrix.path }}
         run: cargo clippy --all-targets --workspace --no-deps --lib -- -D clippy::as_conversions
 
       - name: Run Clippy (all)
-        if: always() && matrix.runClippy
-        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: clippy_all
+        if: ${{ !cancelled() && matrix.runClippy }}
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         working-directory: ${{ matrix.path }}
         run: |
           cargo clippy --all-targets --workspace --no-deps --lib -- -D clippy::all -D clippy::pedantic \
@@ -114,24 +114,24 @@ jobs:
           -A clippy::must_use_candidate
 
       - name: Setup Go
-        continue-on-error: ${{ matrix.allowTestsToFail }}
         uses: WillAbides/setup-go-faster@v1.14.0
-        if: always() && matrix.runGoStaticChecks
         id: go_setup
+        if: ${{ !cancelled() && matrix.runGoStaticChecks }}
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         with:
           go-version: ${{ matrix.goVersion }}
 
       - name: Run Go Vet
-        if: always() && matrix.runGoStaticChecks
-        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: go_vet
+        if: ${{ !cancelled() && matrix.runGoStaticChecks }}
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         run: "go vet ./${{ matrix.path }}/..."
 
       - name: Run Go Staticcheck
         uses: dominikh/staticcheck-action@v1
-        if: always() && matrix.runGoStaticChecks
-        continue-on-error: ${{ matrix.allowTestsToFail }}
         id: go_staticcheck
+        if: ${{ !cancelled() && matrix.runGoStaticChecks }}
+        continue-on-error: ${{ matrix.allowTestsToFail }}
         with:
           version: "2024.1.1"
           install-go: false
@@ -139,14 +139,15 @@ jobs:
           working-directory: ${{ matrix.path }}
 
       - name: Setup Biome
-        id: biome_setup
-        if: always() && matrix.runBiome
         uses: biomejs/setup-biome@v2
+        id: biome_setup
+        if: ${{ !cancelled() && matrix.runBiome }}
         with:
           version: 1.9.4
+
       - name: Run Biome
         id: biome
-        if: always() && matrix.runBiome
+        if: ${{ !cancelled() && matrix.runBiome }}
         continue-on-error: true
         run: biome lint .
 
