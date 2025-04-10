@@ -74,7 +74,7 @@ jobs:
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
 
       - name: Run Slither
-        uses: crytic/slither-action@v0.4.0
+        uses: crytic/slither-action@v0.4.1
         if: always() && matrix.runSlither
         continue-on-error: true
         id: slither
