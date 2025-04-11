@@ -14,6 +14,9 @@ on:
       DD_API_KEY:
         description: "Datadog API key for submitting analysis metric"
         required: false
+      SSH_PRIVATE_KEY:
+        description: "Optional ssh key for cloning component dependencies"
+        required: false
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: true
 
