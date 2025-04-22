@@ -83,7 +83,7 @@ jobs:
         continue-on-error: ${{ matrix.allowTestsToFail }}
         with:
           target: ${{ matrix.nodeRoot }}
-          node-version: 18
+          node-version: 20
           slither-args: ${{ matrix.slitherArgs }}
 
       - uses: webfactory/ssh-agent@v0.9.0
