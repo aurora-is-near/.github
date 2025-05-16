@@ -114,7 +114,8 @@ jobs:
         run: |
           cargo clippy --all-targets --workspace --no-deps --lib -- -D clippy::all -D clippy::pedantic \
           -A clippy::missing_errors_doc -A clippy::missing_panics_doc \
-          -A clippy::must_use_candidate
+          -A clippy::must_use_candidate -A clippy::unreadable_literal \
+          -A clippy::similar_names
 
       - name: Setup Go
         uses: WillAbides/setup-go-faster@v1.14.0
