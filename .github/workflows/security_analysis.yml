@@ -76,6 +76,13 @@ jobs:
         working-directory: ${{ matrix.path }}
         run: test -f Makefile && make env >> "$GITHUB_ENV" || true
 
+      - name: Setup ssh agent
+        uses: webfactory/ssh-agent@v0.9.0
+        if: ${{ !cancelled() && secrets.SSH_PRIVATE_KEY != "" }}
+        continue-on-error: true
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Run Slither
         uses: crytic/slither-action@v0.4.1
         id: slither
@@ -86,12 +93,6 @@ jobs:
           target: ${{ matrix.nodeRoot }}
           node-version: 20
           slither-args: ${{ matrix.slitherArgs }}
-
-      - uses: webfactory/ssh-agent@v0.9.0
-        if: ${{ !cancelled() }}
-        continue-on-error: true
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Install Clippy
         id: clippy_setup
