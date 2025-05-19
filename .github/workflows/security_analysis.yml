@@ -82,6 +82,7 @@ jobs:
         if: ${{ !cancelled() && matrix.runSlither }}
         continue-on-error: ${{ matrix.allowTestsToFail }}
         with:
+          fail-on: medium
           target: ${{ matrix.nodeRoot }}
           node-version: 20
           slither-args: ${{ matrix.slitherArgs }}
