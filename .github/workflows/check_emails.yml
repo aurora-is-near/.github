@@ -11,7 +11,7 @@ on:
 jobs:
   check_emails:
     name: Check committer(s) email(s)
-    runs-on: [self-hosted, light]
+    runs-on: ubuntu-latest
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
