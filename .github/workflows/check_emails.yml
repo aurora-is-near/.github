@@ -11,7 +11,7 @@ on:
 jobs:
   check_emails:
     name: Check committer(s) email(s)
-    runs-on: runs-on=${{ github.run_id }}/family=t3.medium+t3a.medium/image=ubuntu24-full-x64
+    runs-on: ubuntu-latest
     steps:
       - name: Clone the repository
         uses: actions/checkout@v2
